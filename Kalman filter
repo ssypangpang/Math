@@ -62,35 +62,19 @@ When performing the actual calculations for the filter (as discussed below), the
 
 
 
-Task 04 — Run the first blind, paired model evaluation of the current daily-dump baseline and the Prompt 03 two-leg-roll challenger.
+Finish the open items from Prompt 04 using the existing paired runner and annotation sheet. Keep this task to fresh interface verification and preparation of the blind roll pilot.
 
-The Prompt 03 challenger passed scripted tests, but its richer assertions and evidence were supplied by fixtures. The objective now is to measure whether our approved model can generate those assertions from chat and whether the final records improve. Keep this as an opt-in research run. Freeze the two methods before evaluation.
+1. Verify the final frozen version with actual calls.
+Use the approved internal endpoint and two fresh synthetic development windows. In one, a roll trades at an explicitly agreed level away from the quoted midpoint. In the other, the client states a side and receives a two-way quote, with no acceptance. Use the final clarified B prompt, final adapter and existing verifier exactly as frozen. Feed B the actual raw event proposed by A. If A misses the event, record the shared discovery miss.
 
-1. Establish two executable paths.
-A — Current daily-dump extraction prompt, actual model response, current normalizer.
-B — Prompt 03 experimental extraction instructions, actual model response, experimental verifier.
+For each window, report A's discovery calls, B's additional calls, repairs, and whether B's first response passed the adapter and verifier. Show client/dealer sides, execution, quoted market and agreed spread. Distinguish native schema compliance from an accepted lossless format conversion. If the frozen interface fails, preserve the failure and diagnose it on development data. Identify any revision separately and verify it on fresh input before using it for the blind pilot.
 
-Give both paths the same prepared window, source message IDs, available speaker/reply metadata, approved model version and comparable inference settings. Each path receives its own required output schema. Document any difference in the number of model calls or repair attempts.
+2. Prepare my reviewer packet.
+Use the existing authorized historical or sanitized source if I have designated one in this internal workspace. If a source has not been designated, complete step 1 and tell me exactly which internal file reference, date range and optional room filter the runner accepts. Give me the exact invocation with placeholders. Do not substitute synthetic data for the historical pilot.
 
-Inspect the challenger's “preserve the original event” instruction. If B needs an existing event proposal, use an actual first-pass output and record that dependency and cost. Never supply a gold event, hand-selected RFQ, scripted assertion, expected speaker, leg mapping or evidence selection to either path. If B depends on A to discover events, report discovery as shared and score B's incremental impact on fields separately.
+For a designated source, start with a manageable first batch of contiguous room/time blocks selected independently of parser output. Include eligible blocks with no roll. Record the sampling rule, source fingerprint and window IDs. Keep any deliberately selected difficult examples in a separate challenge set.
 
-2. Smoke-test the real interface, then freeze it.
-Use one fresh, fully synthetic roll conversation with the approved internal endpoint, where authorized. Verify that the actual response can be decoded and passed to the verifier. Record missing fields, invalid IDs, exact-text mismatches, unsupported leg references and repairs. Resolve interface problems on development examples only. Keep those examples out of the blind pilot.
+Give me an internally accessible prediction-free worksheet with readable source messages, IDs and speaker roles. For each block, let me mark “reviewed — no roll” or identify every roll. For each roll, let me label leg months, client/dealer side, execution, quoted bid/offer, agreed ticks, supporting message IDs, and whether evidence was visible in the prepared window. Distinguish a blank/unreviewed field from an explicitly unknown or ambiguous field. Show me one filled synthetic example separately.
 
-3. Prepare the blind pilot from approved inputs.
-Use a small, reproducible sample of contiguous room/time blocks from an authorized historical or sanitized source. Select blocks independently of parser successes. Include ordinary windows, quote-only exchanges, accepted rolls, multiple concurrent requests and windows with no roll. Keep deliberately selected difficult examples in a separate challenge set. Give a desk reviewer a blank annotation sheet with source IDs and messages, without either system's predictions.
-
-Ask the reviewer to label event identity, client/dealer direction by settlement leg, quoted bid/offer, execution with the desk, agreed ticks, and supporting messages. Allow unknown or ambiguous per field. Record whether relevant evidence was visible inside the prepared window. Use only reply metadata actually available to the extractor. Freeze labels before comparing predictions; keep them outside both inference paths.
-
-4. Report economics and evidence quality.
-For each method report:
-- Actual windows attempted, valid responses, repairs, failures and missed or extra roll events.
-- Correct complete roll records divided by all labeled rolls, including missed rolls.
-- Correct side by leg, wrong sides, unsupported fills, wrong-RFQ quotes, and exact agreed spread on executed rolls where the level is known.
-- Correct abstentions versus abstentions on fields the source resolves.
-- For the challenger, how often the model supplied usable evidence on its first response and after any repair. Separate missing assertions, bad citations, wrong speaker/leg/RFQ, and evidence that is valid but rejected by the verifier.
-- Paired counts where A wins, B wins, both are correct or both are wrong. Show counts and denominators at event and field level. Keep synthetic, challenge-set and blind historical results separate.
-
-Preserve raw outputs only in the approved internal evaluation environment under its existing data-handling rules. Return a sanitized summary here. Keep application routing and the frozen evaluation methods unchanged during scoring.
-
-If the endpoint, approved historical sample or human labels are unavailable, complete the independent parts. Return the executable runner, exact invocation, blank annotation sheet and the specific missing dependency. Identify which results came from actual model calls. Leave historical accuracy unmeasured until the required inputs exist.
+3. Give me the handoff.
+Return the fresh synthetic results, the internal worksheet location or exact missing input, and the command to resume after I freeze the labels. Keep predictions hidden from the reviewer until label freeze. When scoring becomes possible, report complete correct rolls over all labeled rolls, shared discovery misses, and A-versus-B field wins/losses on shared detected events. Record B's additional calls and repairs separately.
