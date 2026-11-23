@@ -62,37 +62,22 @@ When performing the actual calculations for the filter (as discussed below), the
 
 
 
-Task 02 — Replay the current daily-dump extractor offline and show where evidence, client direction and trade status change.
+Extend the existing Prompt 02 offline replay with one small, test-only comparison. I want to isolate why the fully cited roll paraphrase loses direction, completion and agreed spread before deciding how to change the extractor.
 
-Use the newer daily-dump path assessed in Prompt 01 as the baseline. Implement one small, runnable characterization test or test harness using existing repository conventions. The deliverable is a repeatable baseline and a before/after diagnostic. Preserve current extraction behavior, including cases where it disagrees with the fixture expectation.
+Use the same synthetic Nov/Dec roll, participants, speaker, message order, proposals, evidence selection, accepted 6.8125-tick spread and acknowledgment. Vary only the client’s side-clarification text. Cross these two wording choices in a 2×2 test:
 
-1. Verify the replay boundary.
-Locate daily_dump.py and the existing daily-dump tests by symbol. Confirm the current signatures and callers of prepareCsv, extractWindow, decodeEvents, normalizeEvent, _setClientDirections and tickValue. Locate the actual trade-status logic. Use the current working-tree versions and record their identities, including relevant uncommitted changes. Preserve unrelated edits. Prefer additions in the test area.
+                         Explicit month       Relative month
+Verb “sell”              I sell Nov           I sell the front month
+Noun “seller”            I’m a seller of Nov  I’m a seller of the front month
 
-2. Exercise the real preparation and extraction path.
-Pass entirely synthetic CSV bytes through prepareCsv with explicit room and UTC selections. Call extractWindow with an injected callable returning predetermined model-response text. Supply first and repair responses separately when needed. Use the same responses for all comparisons. Do not instantiate BaseLLMClient, run the dump producer or its dry-run, start the app, access NAS, or invoke storage, enrichment or publication.
+Reuse the existing literal and paraphrase cases where they match. Add only the missing variants. Keep the event and leg economics constant. If prepared message IDs derive from content, regenerate the IDs and map the same evidence roles in each variant so a stale citation cannot explain a difference.
 
-3. Trace one result from source row to final output.
-For each fixture, retain the original row order and IDs in a test-only audit view. Show which rows survived preparation, their order and window membership, the model-proposed event/leg/fields and cited message IDs, and the final RFQ or diagnostic with its evidence, warnings and disposition. Include failed or unresolved windows. Preserve a copy of each original response before normalization. If a reason for an exclusion or override is inferred from inspected code rather than emitted at runtime, label it accordingly.
+For each variant, return one row showing:
+- Whether the clarification reached the window and was cited.
+- Proposed and final client and JPM directions by Nov/Dec leg.
+- Final trade status, quoted spread and agreed spread in separate columns.
+- The earliest function or condition that accounts for any difference. Distinguish an observed value change from an explanation inferred by reading the code.
 
-For each client-direction and trade-status comparison, show:
-fixture | window/event/leg | field and perspective | proposed value | cited evidence IDs | final value | human-specified fixture expectation | effect of normalization.
+Use the existing “sent the RFQ” case as a negative control and the accepted literal roll as a positive control. Reuse the isolated runner and install the NAS metadata-probe stub before any setup that could invoke it. Use fixed responses and synthetic data only. Keep extractor code, prompts, windowing and rule precedence unchanged for this experiment.
 
-Classify the effect as preserved, helped, harmed, or indeterminate. Show cleared-to-Unknown and newly populated values explicitly. Align by event evidence and leg identity. If the raw response schema does not actually carry a comparable field, record “not proposed” and show where the final value is derived. Do not manufacture a before value.
-
-4. Use four short synthetic conversations with targeted variants.
-A. Two-month roll: a client asks for a roll, later says “I sell Nov,” and negotiates a spread. Repeat with “I’m a seller of the front month,” keeping the economics and model proposal equivalent. Identify the client’s side on each leg and keep the roll spread distinct from either outright price.
-B. Trade status: contrast “sent the RFQ” with a clearly linked acceptance of agreed terms followed by “sent” and a dealer acknowledgment. Add a deliberately unsupported model-proposed fill for the first case. Test whether the baseline removes it. Give the second case its status from the full exchange.
-C. Evidence and boundaries: put a request and clarification exactly 30 minutes apart, then just over 30 minutes apart. Also try a short gap across UTC midnight. On the within-window case, replay once with the relevant evidence ID cited and once with that ID omitted. Distinguish evidence unavailable to the model from evidence available but uncited.
-D. Preparation and omissions: include a unique duplicate-flagged broadcast, two same-time/same-text rows with distinct original IDs, and market color followed by a forwarded inquiry. Track what the newer preparation path retains, collapses or reorders. Supply one canned response that omits a known fixture event and show whether anything downstream recovers it. Keep the older legacy duplicate-flag filter separate from the newer path’s signature deduplication.
-
-Reuse existing tests for malformed response → successful repair and exhausted repair where available. Confirm that an unresolved window remains distinguishable from a valid window with zero RFQs.
-
-5. Verify and report.
-Run the targeted offline tests after checking their setup for external side effects. Replay twice and compare substantive outputs. Report the exact command, files touched, pass/fail results, a compact field-change table, and one trace each for a helpful rule and a harmful rule if observed. If an expected behavior does not reproduce, report what actually happened. Keep fixture expectations separate from assertions that pin current behavior so the baseline can document a known error without endorsing it.
-
-Keep this task scoped to replay and diagnosis. Defer prompt tuning, changes to regex precedence, new windowing, databases and UI changes. Fixed responses test the pipeline’s handling of a supplied answer. They cannot establish how often the live LLM gives that answer or the desk’s population accuracy.
-
-Finish with a sanitized handoff identifying the earliest stage responsible for each observed discrepancy and the smallest next comparison justified by the results.
-
-
+Run the focused tests. Return the four-row table, control results, files changed and test result. Conclude whether the observed failure follows the side wording, the relative-month reference, both factors independently, or their combination. If the evidence cannot distinguish them, say so.
