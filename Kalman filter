@@ -62,30 +62,35 @@ When performing the actual calculations for the filter (as discussed below), the
 
 
 
-Task 03 — Build the first offline comparison between the current daily-dump normalizer and an evidence-backed interpretation of two-leg Agency MBS rolls.
+Task 04 — Run the first blind, paired model evaluation of the current daily-dump baseline and the Prompt 03 two-leg-roll challenger.
 
-Prompt 02B established that the current baseline loses direction, completion and agreed spread when either “sell” becomes “seller” or “Nov” becomes “the front month,” even with the clarification present and cited. It also correctly rejects an unsupported fill from “sent the RFQ.” Use these findings to implement a small experimental path alongside the frozen baseline. Keep the normal application path unchanged.
+The Prompt 03 challenger passed scripted tests, but its richer assertions and evidence were supplied by fixtures. The objective now is to measure whether our approved model can generate those assertions from chat and whether the final records improve. Keep this as an opt-in research run. Freeze the two methods before evaluation.
 
-1. Define the minimum experimental output.
-For a roll, capture the proposed event, speaker and economic perspective, side, referenced leg or settlement month, and field-specific evidence (message ID plus exact supporting text). Represent execution status and agreed spread as separate assertions with their own evidence. Preserve quoted bid/offer separately. Distinguish a directly stated value, a value derived from a supported roll relationship, and an unresolved value.
+1. Establish two executable paths.
+A — Current daily-dump extraction prompt, actual model response, current normalizer.
+B — Prompt 03 experimental extraction instructions, actual model response, experimental verifier.
 
-The existing canned response proposes leg-1 clientSide and per-leg dealer directions; it does not propose both per-leg client directions. Preserve that distinction in the comparison. If the experimental schema requires a new field, identify it explicitly. Supply a draft extraction prompt for that schema so it can later be tested with the approved model.
+Give both paths the same prepared window, source message IDs, available speaker/reply metadata, approved model version and comparable inference settings. Each path receives its own required output schema. Document any difference in the number of model calls or repair attempts.
 
-2. Implement the comparison using the existing offline replay.
-Reuse prepareCsv, the injected callable and the Prompt 02/02B fixtures. Keep the source messages, window and economic proposal matched across paths. If the challenger receives richer field-specific evidence than the baseline accepts, record that difference. Label new model outputs as scripted; keep fixture expectations and scorer labels out of the runtime decision path.
+Inspect the challenger's “preserve the original event” instruction. If B needs an existing event proposal, use an actual first-pass output and record that dependency and cost. Never supply a gold event, hand-selected RFQ, scripted assertion, expected speaker, leg mapping or evidence selection to either path. If B depends on A to discover events, report discovery as shared and score B's incremental impact on fields separately.
 
-For relative-month references, resolve front/back against the identified roll’s settlement legs. Check speaker, cited text, event identity, leg consistency and contradictions. A valid message ID proves where the words occurred; it does not by itself prove that the speaker agreed, sold that leg, or referred to this RFQ. Allow unknown or review when the evidence leaves a material ambiguity. Avoid a growing synonym list or special cases keyed to the four fixture strings.
+2. Smoke-test the real interface, then freeze it.
+Use one fresh, fully synthetic roll conversation with the approved internal endpoint, where authorized. Verify that the actual response can be decoded and passed to the verifier. Record missing fields, invalid IDs, exact-text mismatches, unsupported leg references and repairs. Resolve interface problems on development examples only. Keep those examples out of the blind pilot.
 
-3. Test the economic decisions independently.
-Reuse the four wording variants and the “sent the RFQ” negative control. Add a small set of synthetic cases with explicit expected answers:
+3. Prepare the blind pilot from approved inputs.
+Use a small, reproducible sample of contiguous room/time blocks from an authorized historical or sanitized source. Select blocks independently of parser successes. Include ordinary windows, quote-only exchanges, accepted rolls, multiple concurrent requests and windows with no roll. Keep deliberately selected difficult examples in a separate challenge set. Give a desk reviewer a blank annotation sheet with source IDs and messages, without either system's predictions.
 
-- Clear client direction and a dealer quote, with no acceptance. Recover direction while leaving execution and agreed spread unresolved.
-- An explicitly accepted spread away from the bid/offer midpoint. Recover the stated level. In a quote-only variant with the same market, emit no agreed level.
-- Two interleaved rolls where “front month” could refer to either. Leave the link unresolved unless a reply or other evidence identifies the roll.
-- A model proposal citing a real message from the wrong speaker or wrong RFQ. Test whether the challenger rejects the unsupported assertion.
-- An unambiguous confirmation of a trade with the desk where the cited messages do not establish side. Score completion and direction separately according to what the exchange supports.
+Ask the reviewer to label event identity, client/dealer direction by settlement leg, quoted bid/offer, execution with the desk, agreed ticks, and supporting messages. Allow unknown or ambiguous per field. Record whether relevant evidence was visible inside the prepared window. Use only reply metadata actually available to the extractor. Freeze labels before comparing predictions; keep them outside both inference paths.
 
-4. Run and report.
-Keep the current characterization tests passing. Run the challenger offline with synthetic data and the existing isolated runner. Return a paired table by case showing expected, baseline and challenger values for client/dealer direction, execution status, quoted market and agreed spread. Count recovered correct fields, newly wrong fields, unsupported fills and appropriate abstentions. Include any case where the baseline beats the challenger.
+4. Report economics and evidence quality.
+For each method report:
+- Actual windows attempted, valid responses, repairs, failures and missed or extra roll events.
+- Correct complete roll records divided by all labeled rolls, including missed rolls.
+- Correct side by leg, wrong sides, unsupported fills, wrong-RFQ quotes, and exact agreed spread on executed rolls where the level is known.
+- Correct abstentions versus abstentions on fields the source resolves.
+- For the challenger, how often the model supplied usable evidence on its first response and after any repair. Separate missing assertions, bad citations, wrong speaker/leg/RFQ, and evidence that is valid but rejected by the verifier.
+- Paired counts where A wins, B wins, both are correct or both are wrong. Show counts and denominators at event and field level. Keep synthetic, challenge-set and blind historical results separate.
 
-Finish by identifying what was demonstrated by code, what was supplied by a scripted model response, and what still requires a blind desk-labeled comparison using the approved model. Report the files changed and exact test command. Keep production routing, existing extraction prompts, windowing, storage and UI unchanged.
+Preserve raw outputs only in the approved internal evaluation environment under its existing data-handling rules. Return a sanitized summary here. Keep application routing and the frozen evaluation methods unchanged during scoring.
+
+If the endpoint, approved historical sample or human labels are unavailable, complete the independent parts. Return the executable runner, exact invocation, blank annotation sheet and the specific missing dependency. Identify which results came from actual model calls. Leave historical accuracy unmeasured until the required inputs exist.
