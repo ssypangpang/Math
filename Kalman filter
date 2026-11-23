@@ -62,22 +62,30 @@ When performing the actual calculations for the filter (as discussed below), the
 
 
 
-Extend the existing Prompt 02 offline replay with one small, test-only comparison. I want to isolate why the fully cited roll paraphrase loses direction, completion and agreed spread before deciding how to change the extractor.
+Task 03 — Build the first offline comparison between the current daily-dump normalizer and an evidence-backed interpretation of two-leg Agency MBS rolls.
 
-Use the same synthetic Nov/Dec roll, participants, speaker, message order, proposals, evidence selection, accepted 6.8125-tick spread and acknowledgment. Vary only the client’s side-clarification text. Cross these two wording choices in a 2×2 test:
+Prompt 02B established that the current baseline loses direction, completion and agreed spread when either “sell” becomes “seller” or “Nov” becomes “the front month,” even with the clarification present and cited. It also correctly rejects an unsupported fill from “sent the RFQ.” Use these findings to implement a small experimental path alongside the frozen baseline. Keep the normal application path unchanged.
 
-                         Explicit month       Relative month
-Verb “sell”              I sell Nov           I sell the front month
-Noun “seller”            I’m a seller of Nov  I’m a seller of the front month
+1. Define the minimum experimental output.
+For a roll, capture the proposed event, speaker and economic perspective, side, referenced leg or settlement month, and field-specific evidence (message ID plus exact supporting text). Represent execution status and agreed spread as separate assertions with their own evidence. Preserve quoted bid/offer separately. Distinguish a directly stated value, a value derived from a supported roll relationship, and an unresolved value.
 
-Reuse the existing literal and paraphrase cases where they match. Add only the missing variants. Keep the event and leg economics constant. If prepared message IDs derive from content, regenerate the IDs and map the same evidence roles in each variant so a stale citation cannot explain a difference.
+The existing canned response proposes leg-1 clientSide and per-leg dealer directions; it does not propose both per-leg client directions. Preserve that distinction in the comparison. If the experimental schema requires a new field, identify it explicitly. Supply a draft extraction prompt for that schema so it can later be tested with the approved model.
 
-For each variant, return one row showing:
-- Whether the clarification reached the window and was cited.
-- Proposed and final client and JPM directions by Nov/Dec leg.
-- Final trade status, quoted spread and agreed spread in separate columns.
-- The earliest function or condition that accounts for any difference. Distinguish an observed value change from an explanation inferred by reading the code.
+2. Implement the comparison using the existing offline replay.
+Reuse prepareCsv, the injected callable and the Prompt 02/02B fixtures. Keep the source messages, window and economic proposal matched across paths. If the challenger receives richer field-specific evidence than the baseline accepts, record that difference. Label new model outputs as scripted; keep fixture expectations and scorer labels out of the runtime decision path.
 
-Use the existing “sent the RFQ” case as a negative control and the accepted literal roll as a positive control. Reuse the isolated runner and install the NAS metadata-probe stub before any setup that could invoke it. Use fixed responses and synthetic data only. Keep extractor code, prompts, windowing and rule precedence unchanged for this experiment.
+For relative-month references, resolve front/back against the identified roll’s settlement legs. Check speaker, cited text, event identity, leg consistency and contradictions. A valid message ID proves where the words occurred; it does not by itself prove that the speaker agreed, sold that leg, or referred to this RFQ. Allow unknown or review when the evidence leaves a material ambiguity. Avoid a growing synonym list or special cases keyed to the four fixture strings.
 
-Run the focused tests. Return the four-row table, control results, files changed and test result. Conclude whether the observed failure follows the side wording, the relative-month reference, both factors independently, or their combination. If the evidence cannot distinguish them, say so.
+3. Test the economic decisions independently.
+Reuse the four wording variants and the “sent the RFQ” negative control. Add a small set of synthetic cases with explicit expected answers:
+
+- Clear client direction and a dealer quote, with no acceptance. Recover direction while leaving execution and agreed spread unresolved.
+- An explicitly accepted spread away from the bid/offer midpoint. Recover the stated level. In a quote-only variant with the same market, emit no agreed level.
+- Two interleaved rolls where “front month” could refer to either. Leave the link unresolved unless a reply or other evidence identifies the roll.
+- A model proposal citing a real message from the wrong speaker or wrong RFQ. Test whether the challenger rejects the unsupported assertion.
+- An unambiguous confirmation of a trade with the desk where the cited messages do not establish side. Score completion and direction separately according to what the exchange supports.
+
+4. Run and report.
+Keep the current characterization tests passing. Run the challenger offline with synthetic data and the existing isolated runner. Return a paired table by case showing expected, baseline and challenger values for client/dealer direction, execution status, quoted market and agreed spread. Count recovered correct fields, newly wrong fields, unsupported fills and appropriate abstentions. Include any case where the baseline beats the challenger.
+
+Finish by identifying what was demonstrated by code, what was supplied by a scripted model response, and what still requires a blind desk-labeled comparison using the approved model. Report the files changed and exact test command. Keep production routing, existing extraction prompts, windowing, storage and UI unchanged.
