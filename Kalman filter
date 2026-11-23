@@ -11,6 +11,14 @@ Optimality of Kalman filtering assumes that errors have a zero mean normal (Gaus
 Extensions and generalizations of the method have also been developed, such as the extended Kalman filter and the unscented Kalman filter which work on nonlinear systems. The basis is a hidden Markov model such that the state space of the latent variables is continuous and all latent and observed variables have Gaussian distributions. Kalman filtering has been used successfully in multi-sensor fusion,[10] and distributed sensor networks to develop distributed or consensus Kalman filtering.[11]
 
 
+
+
+
+
+
+
+
+
 The filtering method is named for Hungarian émigré Rudolf E. Kálmán, although Thorvald Nicolai Thiele[12][13] and Peter Swerling developed a similar algorithm earlier. Richard S. Bucy of the Johns Hopkins Applied Physics Laboratory contributed to the theory, causing it to be known sometimes as Kalman–Bucy filtering. Kalman was inspired to derive the Kalman filter by applying state variables to the Wiener filtering problem.[14] Stanley F. Schmidt is generally credited with developing the first implementation of a Kalman filter. He realized that the filter could be divided into two distinct parts, with one part for time periods between sensor outputs and another part for incorporating measurements.[15] It was during a visit by Kálmán to the NASA Ames Research Center that Schmidt saw the applicability of Kálmán's ideas to the nonlinear problem of trajectory estimation for the Apollo program resulting in its incorporation in the Apollo navigation computer.[16]: 16 
 
 This digital filter is sometimes termed the Stratonovich–Kalman–Bucy filter because it is a special case of a more general, nonlinear filter developed by the Soviet mathematician Ruslan Stratonovich.[17][18][19][20] In fact, some of the special case linear filter's equations appeared in papers by Stratonovich that were published before the summer of 1961, when Kalman met with Stratonovich during a conference in Moscow.[21]
@@ -21,6 +29,24 @@ The Apollo computer used 2k of magnetic core RAM and 36k wire rope [...]. The CP
 
 — Interview with Jack Crenshaw, by Matthew Reed, TRS-80.org (2009) 
 Kalman filters have been vital in the implementation of the navigation systems of U.S. Navy nuclear ballistic missile submarines, and in the guidance and navigation systems of cruise missiles such as the U.S. Navy's Tomahawk missile and the U.S. Air Force's Air Launched Cruise Missile. They are also used in the guidance and navigation systems of reusable launch vehicles and the attitude control and navigation systems of spacecraft which dock at the International Space Station.[22]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
