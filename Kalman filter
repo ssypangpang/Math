@@ -1,0 +1,72 @@
+Kalman filter
+
+In statistics and control theory, Kalman filtering (also known as linear quadratic estimation) is an algorithm that uses a series of measurements observed over time, including statistical noise and other inaccuracies, to produce estimates of unknown variables that tend to be more accurate than those based on a single measurement, by estimating a joint probability distribution over the variables for each time-step. The filter is constructed as a mean squared error minimizer, but also relates to maximum likelihood statistics.[1] The filter is named after Rudolf E. Kálmán.
+
+Kalman filtering has numerous technological applications. A common application is for guidance, navigation, and control of vehicles, particularly aircraft, spacecraft and ships positioned dynamically.[2] Furthermore, Kalman filtering is much applied in time series analysis tasks such as signal processing and econometrics. Kalman filtering is also important for robotic motion planning and control,[3][4] and can be used for trajectory optimization.[5] Kalman filtering also works for modeling the central nervous system's control of movement. Due to the time delay between issuing motor commands and receiving sensory feedback, the use of Kalman filters provides a realistic model for making estimates of the current state of a motor system and issuing updated commands.[6]
+
+The algorithm works via a two-phase process: a prediction phase and an update phase. In the prediction phase, the Kalman filter produces estimates of the current state variables, including their uncertainties. Once the outcome of the next measurement (necessarily corrupted with some error, including random noise) is observed, these estimates are updated using a weighted average, with more weight given to estimates with greater certainty. The algorithm is recursive. It can operate in real time, using only the present input measurements and the state calculated previously and its uncertainty matrix; no additional past information is required.
+
+Optimality of Kalman filtering assumes that errors have a zero mean normal (Gaussian) distribution. In the words of Rudolf E. Kálmán, "The following assumptions are made about random processes: Physical random phenomena may be thought of as due to primary random sources exciting dynamic systems. The primary sources are assumed to be independent gaussian random processes with zero mean; the dynamic systems will be linear."[7] Regardless of Gaussianity, however, if the process and measurement covariances are known and mean is zero, then the Kalman filter is the best possible linear estimator in the minimum mean-square-error sense,[8] although there may be better nonlinear estimators. It is a common misconception (perpetuated in the literature) that the Kalman filter cannot be rigorously applied unless all noise processes are assumed to be Gaussian.[9]
+
+Extensions and generalizations of the method have also been developed, such as the extended Kalman filter and the unscented Kalman filter which work on nonlinear systems. The basis is a hidden Markov model such that the state space of the latent variables is continuous and all latent and observed variables have Gaussian distributions. Kalman filtering has been used successfully in multi-sensor fusion,[10] and distributed sensor networks to develop distributed or consensus Kalman filtering.[11]
+
+
+The filtering method is named for Hungarian émigré Rudolf E. Kálmán, although Thorvald Nicolai Thiele[12][13] and Peter Swerling developed a similar algorithm earlier. Richard S. Bucy of the Johns Hopkins Applied Physics Laboratory contributed to the theory, causing it to be known sometimes as Kalman–Bucy filtering. Kalman was inspired to derive the Kalman filter by applying state variables to the Wiener filtering problem.[14] Stanley F. Schmidt is generally credited with developing the first implementation of a Kalman filter. He realized that the filter could be divided into two distinct parts, with one part for time periods between sensor outputs and another part for incorporating measurements.[15] It was during a visit by Kálmán to the NASA Ames Research Center that Schmidt saw the applicability of Kálmán's ideas to the nonlinear problem of trajectory estimation for the Apollo program resulting in its incorporation in the Apollo navigation computer.[16]: 16 
+
+This digital filter is sometimes termed the Stratonovich–Kalman–Bucy filter because it is a special case of a more general, nonlinear filter developed by the Soviet mathematician Ruslan Stratonovich.[17][18][19][20] In fact, some of the special case linear filter's equations appeared in papers by Stratonovich that were published before the summer of 1961, when Kalman met with Stratonovich during a conference in Moscow.[21]
+
+This Kalman filtering was first described and developed partially in technical papers by Swerling (1958), Kalman (1960) and Kalman and Bucy (1961).
+
+The Apollo computer used 2k of magnetic core RAM and 36k wire rope [...]. The CPU was built from ICs [...]. Clock speed was under 100 kHz [...]. The fact that the MIT engineers were able to pack such good software (one of the very first applications of the Kalman filter) into such a tiny computer is truly remarkable.
+
+— Interview with Jack Crenshaw, by Matthew Reed, TRS-80.org (2009) 
+Kalman filters have been vital in the implementation of the navigation systems of U.S. Navy nuclear ballistic missile submarines, and in the guidance and navigation systems of cruise missiles such as the U.S. Navy's Tomahawk missile and the U.S. Air Force's Air Launched Cruise Missile. They are also used in the guidance and navigation systems of reusable launch vehicles and the attitude control and navigation systems of spacecraft which dock at the International Space Station.[22]
+
+
+
+Kalman filtering uses a system's dynamic model (e.g., physical laws of motion), known control inputs to that system, and multiple sequential measurements (such as from sensors) to form an estimate of the system's varying quantities (its state) that is better than the estimate obtained by using only one measurement alone. As such, it is a common sensor fusion and data fusion algorithm.
+
+Noisy sensor data, approximations in the equations that describe the system evolution, and external factors that are not accounted for, all limit how well it is possible to determine the system's state. The Kalman filter deals effectively with the uncertainty due to noisy sensor data and, to some extent, with random external factors. The Kalman filter produces an estimate of the state of the system as an average of the system's predicted state and of the new measurement using a weighted average. The purpose of the weights is that values with better (i.e., smaller) estimated uncertainty are "trusted" more. The weights are calculated from the covariance, a measure of the estimated uncertainty of the prediction of the system's state. The result of the weighted average is a new state estimate that lies between the predicted and measured state, and has a better estimated uncertainty than either alone. This process is repeated at every time step, with the new estimate and its covariance informing the prediction used in the following iteration. This means that Kalman filter works recursively and requires only the last "best guess", rather than the entire history, of a system's state to calculate a new state.
+
+The measurements' certainty-grading and current-state estimate are important considerations. It is common to discuss the filter's response in terms of the Kalman filter's gain. The Kalman gain is the weight given to the measurements and current-state estimate, and can be "tuned" to achieve a particular performance. With a high gain, the filter places more weight on the most recent measurements, and thus conforms to them more responsively. With a low gain, the filter conforms to the model predictions more closely. At the extremes, a high gain (close to one) will result in a more jumpy estimated trajectory, while a low gain (close to zero) will smooth out noise but decrease the responsiveness.
+
+When performing the actual calculations for the filter (as discussed below), the state estimate and covariances are coded into matrices because of the multiple dimensions involved in a single set of calculations. This allows for a representation of linear relationships between different state variables (such as position, velocity, and acceleration) in any of the transition models or covariances.
+
+
+
+
+
+Task 02 — Replay the current daily-dump extractor offline and show where evidence, client direction and trade status change.
+
+Use the newer daily-dump path assessed in Prompt 01 as the baseline. Implement one small, runnable characterization test or test harness using existing repository conventions. The deliverable is a repeatable baseline and a before/after diagnostic. Preserve current extraction behavior, including cases where it disagrees with the fixture expectation.
+
+1. Verify the replay boundary.
+Locate daily_dump.py and the existing daily-dump tests by symbol. Confirm the current signatures and callers of prepareCsv, extractWindow, decodeEvents, normalizeEvent, _setClientDirections and tickValue. Locate the actual trade-status logic. Use the current working-tree versions and record their identities, including relevant uncommitted changes. Preserve unrelated edits. Prefer additions in the test area.
+
+2. Exercise the real preparation and extraction path.
+Pass entirely synthetic CSV bytes through prepareCsv with explicit room and UTC selections. Call extractWindow with an injected callable returning predetermined model-response text. Supply first and repair responses separately when needed. Use the same responses for all comparisons. Do not instantiate BaseLLMClient, run the dump producer or its dry-run, start the app, access NAS, or invoke storage, enrichment or publication.
+
+3. Trace one result from source row to final output.
+For each fixture, retain the original row order and IDs in a test-only audit view. Show which rows survived preparation, their order and window membership, the model-proposed event/leg/fields and cited message IDs, and the final RFQ or diagnostic with its evidence, warnings and disposition. Include failed or unresolved windows. Preserve a copy of each original response before normalization. If a reason for an exclusion or override is inferred from inspected code rather than emitted at runtime, label it accordingly.
+
+For each client-direction and trade-status comparison, show:
+fixture | window/event/leg | field and perspective | proposed value | cited evidence IDs | final value | human-specified fixture expectation | effect of normalization.
+
+Classify the effect as preserved, helped, harmed, or indeterminate. Show cleared-to-Unknown and newly populated values explicitly. Align by event evidence and leg identity. If the raw response schema does not actually carry a comparable field, record “not proposed” and show where the final value is derived. Do not manufacture a before value.
+
+4. Use four short synthetic conversations with targeted variants.
+A. Two-month roll: a client asks for a roll, later says “I sell Nov,” and negotiates a spread. Repeat with “I’m a seller of the front month,” keeping the economics and model proposal equivalent. Identify the client’s side on each leg and keep the roll spread distinct from either outright price.
+B. Trade status: contrast “sent the RFQ” with a clearly linked acceptance of agreed terms followed by “sent” and a dealer acknowledgment. Add a deliberately unsupported model-proposed fill for the first case. Test whether the baseline removes it. Give the second case its status from the full exchange.
+C. Evidence and boundaries: put a request and clarification exactly 30 minutes apart, then just over 30 minutes apart. Also try a short gap across UTC midnight. On the within-window case, replay once with the relevant evidence ID cited and once with that ID omitted. Distinguish evidence unavailable to the model from evidence available but uncited.
+D. Preparation and omissions: include a unique duplicate-flagged broadcast, two same-time/same-text rows with distinct original IDs, and market color followed by a forwarded inquiry. Track what the newer preparation path retains, collapses or reorders. Supply one canned response that omits a known fixture event and show whether anything downstream recovers it. Keep the older legacy duplicate-flag filter separate from the newer path’s signature deduplication.
+
+Reuse existing tests for malformed response → successful repair and exhausted repair where available. Confirm that an unresolved window remains distinguishable from a valid window with zero RFQs.
+
+5. Verify and report.
+Run the targeted offline tests after checking their setup for external side effects. Replay twice and compare substantive outputs. Report the exact command, files touched, pass/fail results, a compact field-change table, and one trace each for a helpful rule and a harmful rule if observed. If an expected behavior does not reproduce, report what actually happened. Keep fixture expectations separate from assertions that pin current behavior so the baseline can document a known error without endorsing it.
+
+Keep this task scoped to replay and diagnosis. Defer prompt tuning, changes to regex precedence, new windowing, databases and UI changes. Fixed responses test the pipeline’s handling of a supplied answer. They cannot establish how often the live LLM gives that answer or the desk’s population accuracy.
+
+Finish with a sanitized handoff identifying the earliest stage responsible for each observed discrepancy and the smallest next comparison justified by the results.
+
+
