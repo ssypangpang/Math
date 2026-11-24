@@ -62,19 +62,32 @@ When performing the actual calculations for the filter (as discussed below), the
 
 
 
-Finish the open items from Prompt 04 using the existing paired runner and annotation sheet. Keep this task to fresh interface verification and preparation of the blind roll pilot.
+Task 05 — Extend the experimental RFQ comparison and reviewer worksheet to four Agency MBS trade families: outright TBA, dollar roll, coupon swap, and TBA versus Treasury. Include other and unclear so a request can remain outside those four families.
 
-1. Verify the final frozen version with actual calls.
-Use the approved internal endpoint and two fresh synthetic development windows. In one, a roll trades at an explicitly agreed level away from the quoted midpoint. In the other, the client states a side and receives a two-way quote, with no acceptance. Use the final clarified B prompt, final adapter and existing verifier exactly as frozen. Feed B the actual raw event proposed by A. If A misses the event, record the shared discovery miss.
+Use the current daily-dump path as frozen baseline A. Preserve the Prompt 04B roll challenger and its two fresh results as a versioned comparison point. Build the product-aware challenger as a separate research version. Reuse the current runner, evidence checks and worksheet where possible.
 
-For each window, report A's discovery calls, B's additional calls, repairs, and whether B's first response passed the adapter and verifier. Show client/dealer sides, execution, quoted market and agreed spread. Distinguish native schema compliance from an accepted lossless format conversion. If the frozen interface fails, preserve the failure and diagnose it on development data. Identify any revision separately and verify it on fresh input before using it for the blind pilot.
+1. Map actual product coverage before editing.
+Inspect the active trade-type classifier, schemas, normalization, price/spread helpers and existing tests. Return a short matrix for each family: what A can discover, represent, normalize and test; what the roll challenger currently assumes; and which capabilities remain unknown. Use repository or desk conventions for quotation orientation and units. Flag conventions that need my input. Do not assume a missing test means the baseline cannot parse the product.
 
-2. Prepare my reviewer packet.
-Use the existing authorized historical or sanitized source if I have designated one in this internal workspace. If a source has not been designated, complete step 1 and tell me exactly which internal file reference, date range and optional room filter the runner accepts. Give me the exact invocation with placeholders. Do not substitute synthetic data for the historical pilot.
+2. Implement a common event record with product-specific interpretation.
+The shared fields are request identity, product family, participants, legs, quoted terms, agreed terms, execution status and field-level source evidence. Preserve raw quotation wording and units alongside normalized values. Keep RFQ, quote and execution distinct. For each family:
 
-For a designated source, start with a manageable first batch of contiguous room/time blocks selected independently of parser output. Include eligible blocks with no roll. Record the sampling rule, source fingerprint and window IDs. Keep any deliberately selected difficult examples in a separate challenge set.
+- Outright: capture program, term, coupon, settlement, face, side and outright price. A two-way inquiry can have a known dealer market and unknown client side.
+- Roll: reuse the tested roll behavior. Preserve quoted versus agreed drop and the existing completion-evidence regression.
+- Coupon swap: identify both coupons and settlements, bind each side to its coupon, and retain the source orientation of the differential. Normalize its sign only under a verified convention. Do not inherit front/back-month logic from rolls.
+- TBA versus Treasury: distinguish a request for an executable package from a benchmark quotation, hedge discussion or market color. Distinguish cash Treasury from futures when supported. Preserve face, contracts, price, yield or spread in their stated units. Leave instrument identity, hedge quantity and ratio unresolved when the source does not establish them.
 
-Give me an internally accessible prediction-free worksheet with readable source messages, IDs and speaker roles. For each block, let me mark “reviewed — no roll” or identify every roll. For each roll, let me label leg months, client/dealer side, execution, quoted bid/offer, agreed ticks, supporting message IDs, and whether evidence was visible in the prepared window. Distinguish a blank/unreviewed field from an explicitly unknown or ambiguous field. Show me one filled synthetic example separately.
+Keep A's original event classification visible. Where A has proposed an event, let the experimental path assess the family from the source and record disagreements. Report separately any event that cannot reach B because A omitted or filtered it.
 
-3. Give me the handoff.
-Return the fresh synthetic results, the internal worksheet location or exact missing input, and the command to resume after I freeze the labels. Keep predictions hidden from the reviewer until label freeze. When scoring becomes possible, report complete correct rolls over all labeled rolls, shared discovery misses, and A-versus-B field wins/losses on shared detected events. Record B's additional calls and repairs separately.
+3. Run a bounded synthetic comparison with actual model calls.
+Retain the roll regression cases. For each of the three newly covered families, use at least one fresh accepted case and one fresh quote-only or ambiguous case. Write the fixture expectations before running either method and keep them out of inference. Include a two-way outright with no client side, a coupon switch where reversing the legs changes the economics, and a Treasury reference that does not establish a Treasury transaction. Use an additional mixed window with two simultaneous RFQs to test wrong-event attachment.
+
+Run A and the new challenger on the same prepared inputs using the approved internal model. Separate real model outputs from scripted contract tests. Report by family: events found/missed/extra, product classification, leg identity and side, quote versus agreed terms, units/orientation, execution, wrong-event attachments, abstentions, and model calls/repairs. Show at least one baseline win or challenger failure if observed. Mark unsupported fields explicitly. Keep synthetic results separate from historical accuracy.
+
+4. Generalize the blind worksheet now, before I label data.
+For every selected room/time block, let the reviewer mark “reviewed—no RFQ” or enumerate every RFQ and label its family. Support multiple requests per window and linked messages across boundaries. Show common fields plus only the relevant product fields. Distinguish unknown, ambiguous, not applicable and unreviewed. Keep predictions hidden.
+
+Keep two samples separate: (a) contiguous blocks chosen independently of parser output for ordinary-flow evaluation and (b) a product-balanced challenge set for rare products and difficult examples. Report each family with its denominator. A family absent from the ordinary sample is unmeasured. The first four windows can test worksheet usability; they do not establish product-level accuracy.
+
+5. Handoff.
+Return the coverage matrix, the synthetic A/B comparison, remaining desk-convention questions, and the location of the blank multi-product worksheet. Preserve the baseline and the prior frozen roll results. Historical data is unnecessary for the implementation and synthetic comparison. Use a historical source only once I designate its scope in the internal environment.
